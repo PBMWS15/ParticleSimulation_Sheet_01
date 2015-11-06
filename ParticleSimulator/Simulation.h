@@ -26,7 +26,7 @@ private:
     //relevant data for collision for more complex terrain should be computed, for a flat surface can be hardcoded
     glm::dvec3 _collisionNormal{ 0.0,1.0,0.0 };
     glm::dvec3 _collisionTangent{ 1.0,0.0,0.0 };
-    double _collisionEps = 0.9;
+    double _collisionEps = 0.3;
    
 };
 
