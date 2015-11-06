@@ -23,14 +23,13 @@ int main(int argc, char** argv)
 
     //creating the starting velocitz vector
     double angleInRadians = glm::radians(angle);
-    glm::dvec3 launchVelocity{ cos(angleInRadians),sin(angleInRadians),0.0 };
-    
+    glm::dvec3 launchVelocity{ cos(angleInRadians),sin(angleInRadians),0.0 };    
     launchVelocity *= speed;
 
     //set the launch vector for the ball
     golfball.setVelocity(launchVelocity);
 
-    //creeate the simulation={ball, startTime,endTime,stepsize,(optional)wind vector}
+    //create the simulation={ball, startTime,endTime,stepsize,(optional)wind vector}
     Simulation sim{ golfball,0.0,100,timeStep,{0.0,0.0,7.0}};
 
     //run simulation

@@ -31,7 +31,7 @@ void Simulation::update(double deltaTime)
 void Simulation::run()
 {
     auto t = _tStart;
-    while (t < _tEnd && glm::length(_ball.getVelocity())<0.01)
+    while (t < _tEnd && glm::length(_ball.getVelocity())>0.01)
     {
         update(_deltaT);
 
