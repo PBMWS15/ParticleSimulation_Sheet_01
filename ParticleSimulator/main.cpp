@@ -21,10 +21,10 @@ int main(int argc, char** argv)
     double speed = 60;
 
 
-    //creating the starting vector
+    //creating the starting velocitz vector
     double angleInRadians = glm::radians(angle);
     glm::dvec3 launchVelocity{ cos(angleInRadians),sin(angleInRadians),0.0 };
-    launchVelocity = glm::normalize(launchVelocity);
+    
     launchVelocity *= speed;
 
     //set the launch vector for the ball
