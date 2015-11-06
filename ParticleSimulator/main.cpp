@@ -8,6 +8,7 @@ void printVector(const glm::dvec3& vec)
 }
 int main(int argc, char** argv)
 {
+
     /*Simulation Parameter*/
     double timeStep = 0.001;
 

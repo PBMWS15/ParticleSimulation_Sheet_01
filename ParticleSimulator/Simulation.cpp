@@ -31,9 +31,16 @@ void Simulation::update(double deltaTime)
 void Simulation::run()
 {
     auto t = _tStart;
-    while (t < _tEnd && _ball.getPosition().y >= 0)
+    while (t < _tEnd && glm::length(_ball.getVelocity())<0.01)
     {
         update(_deltaT);
+
+        //collision with ground handling
+        if(_ball.getPosition().y<=0)
+        {
+            //reflect velocity vector to the normal and rescale it
+            _ball.setVelocity(_collisionEps*glm::reflect(_ball.getVelocity(), _collisionNormal));
+        }
         t += _deltaT;
 
     }
