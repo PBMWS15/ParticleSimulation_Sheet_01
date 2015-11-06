@@ -1,34 +1,37 @@
 #pragma once
 #include<glm/glm.hpp>
+
 #include <iostream>
 
 class Particle
 {
 public:
-    Particle(const glm::vec3& position, double mass);
+    Particle(const glm::dvec3& position, double mass);
     virtual ~Particle();
-    void virtual update() { std::cout << "doing nothing\n"; };
+    virtual void update(double timeStep);
     
     //Setters
-    void setPosition(const glm::vec3& position);
-    void setVelocity(const glm::vec3& velocity);
-    void setAccelertation(const glm::vec3& acceleration);
-    void setForce(const glm::vec3& force);
+    void setPosition(const glm::dvec3& position);
+    void setVelocity(const glm::dvec3& velocity);
+    void setAccelertation(const glm::dvec3& acceleration);
+    void setForce(const glm::dvec3& force);
 
     //Getters
-    glm::vec3 getPosition();
-    glm::vec3 getVelocity();
-    glm::vec3 getAcceleration();
+    glm::dvec3 getPosition();
+    glm::dvec3 getVelocity();
+    glm::dvec3 getAcceleration();
     double getMass();
 
     
 
 private:
 
-    glm::vec3 _pos;
-    glm::vec3 _vel;
-    glm::vec3 _acc;
-    glm::vec3 _force;
+    glm::dvec3 _pos;
+    glm::dvec3 _vel = { 0.0,0.0,0.0 };
+    glm::dvec3 _acc = { 0.0,0.0,0.0 };
+    glm::dvec3 _force = { 0.0,0.0,0.0 };
+
+    glm::dvec3 _accOld={0.0,0.0,0.0};
     double _mass;
 
 

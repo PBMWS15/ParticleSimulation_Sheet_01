@@ -1,6 +1,6 @@
 #include "Ball.h"
-
-Ball::Ball(const glm::vec3& position, double mass, double radius):Particle{position,mass},_radius{radius}
+#include<glm/gtc/constants.hpp>
+Ball::Ball(const glm::dvec3& position, double mass, double radius):Particle{position,mass},_radius{radius}
 {
 }
 
@@ -8,10 +8,10 @@ Ball::~Ball()
 {
 }
 
-void Ball::update()
+
+double Ball::getArea()
 {
-    //do ball specific update
-    std::cout << "Ball updater\n";
+    return _radius*_radius*glm::pi<double>();
 }
 
 double Ball::getRadius()

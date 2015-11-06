@@ -4,11 +4,10 @@
 class Ball : public Particle
 {
 public:
-    Ball(const glm::vec3& position, double mass, double radius);
+    Ball(const glm::dvec3& position, double mass, double radius);
     ~Ball();
-
-    void update() override;
-
+    
+    double getArea();
     double getRadius();
 
 private:
