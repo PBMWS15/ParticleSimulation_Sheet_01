@@ -1,5 +1,6 @@
 #include "Particle.h"
 #include "ODE.h"
+
 Particle::Particle(const glm::dvec3& position, double mass) : _pos{position}, _mass{mass}
 {
 }
@@ -23,20 +24,18 @@ void Particle::update(double timeStep)
     //_vel += timeStep * _acc;
 
     /*Runge Kutta 4th Order*/
+    _acc = _force / _mass;
 
-    _acc = _force / _mass;  
-    //estimate v(t+z)=v(t)+z*a(t)
-    auto deriv = [&](double t, std::vector<double>u) {      
-       return std::vector<double>{_vel.x+t*_acc.x, _vel.y + t*_acc.y, _vel.z + t*_acc.z, _acc.x, _acc.y, _acc.z };
-    };
-   
-    auto result = ODE::rk4vec(0, { _pos.x,_pos.y,_pos.z,_vel.x,_vel.y,_vel.z }, timeStep, deriv);
+    //estimate derivatives v(t+z)=v(t)+z*a(t), a(t+z)=a(t)
+    auto deriv = [&](double t, std::vector<double> u)
+        {
+            return std::vector<double>{_vel.x + t * _acc.x, _vel.y + t * _acc.y, _vel.z + t * _acc.z, _acc.x, _acc.y, _acc.z};
+        };
 
-    _pos = { result[0],result[1], result[2] };    
-    _vel = { result[3],result[4], result[5] };
+    auto result = ODE::rk4vec(0, {_pos.x,_pos.y,_pos.z,_vel.x,_vel.y,_vel.z}, timeStep, deriv);
 
-
-
+    _pos = {result[0],result[1], result[2]};
+    _vel = {result[3],result[4], result[5]};
 }
 
 void Particle::setAccelertation(const glm::dvec3& acceleration)
@@ -75,6 +74,6 @@ void Particle::setPosition(const glm::dvec3& position)
 }
 
 void Particle::setVelocity(const glm::dvec3& velocity)
-{   
+{
     _vel = velocity;
 }
