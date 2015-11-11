@@ -1,7 +1,9 @@
 #include "Simulation.h"
+#include <iostream>
+#include <fstream>
 
 
-Simulation::Simulation(const Ball& ball, double tStart, double tEnd, double deltaTime, const glm::dvec3& wind) : _ball{ ball }, _tStart{ tStart }, _tEnd{ tEnd }, _deltaT{ deltaTime }, _vWind{ wind }
+Simulation::Simulation(const Ball& ball, double tStart, double tEnd, double deltaTime,  const glm::dvec3& wind) : _ball{ ball }, _tStart{ tStart }, _tEnd{ tEnd }, _deltaT{ deltaTime }, _vWind{ wind }
 {
 }
 
@@ -22,7 +24,8 @@ void Simulation::update(double deltaTime)
 
 
     //apply forces to the ball
-    _ball.setForce(gravForce+dragForce);
+    //_ball.setForce(gravForce);
+    _ball.setForce(gravForce + dragForce);
 
     //let the ball move according to newtons second law of motion (a=F/m)
     _ball.update(deltaTime);
@@ -30,6 +33,10 @@ void Simulation::update(double deltaTime)
 
 void Simulation::run()
 {
+    std::ofstream output;
+    output.open("data.csv");
+    
+    
     auto t = _tStart;
 
     /*  Note: velocity breaking condition will fail under certain conditions, 
@@ -37,7 +44,7 @@ void Simulation::run()
         A different approach is to calculate the total energy of the ball (kinetic + potential)
         and break if the total energy is <eps
     */
-    while (t < _tEnd && glm::length(_ball.getVelocity())>0.01)
+    while (t < _tEnd && glm::length(_ball.getVelocity())>=0.01)
     {
         update(_deltaT);
 
@@ -45,15 +52,23 @@ void Simulation::run()
         if(_ball.getPosition().y<=0)
         {
             std::cout<<"BOUNCE!\n";
-            //reflect velocity vector to the normal and rescale it
+            //reflect velocity vector to the normal and rescale it          
             _ball.setVelocity(_collisionEps*glm::reflect(_ball.getVelocity(), _collisionNormal));
+
+            //set ball back on top of ground
+            auto pos = _ball.getPosition();
+            pos.y = 0;
+            _ball.setPosition(pos);
         }
         t += _deltaT;
+        
+        output << _ball.getPosition().x << "," << _ball.getPosition().y << ","<< _ball.getPosition().z<< "\n";
 
     }
+    
 }
 
-Ball Simulation::getBall()
+Ball Simulation::getBall() const
 {
     return _ball;
 }

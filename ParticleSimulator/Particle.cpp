@@ -1,5 +1,5 @@
 #include "Particle.h"
-
+#include "ODE.h"
 Particle::Particle(const glm::dvec3& position, double mass) : _pos{position}, _mass{mass}
 {
 }
@@ -17,15 +17,24 @@ void Particle::update(double timeStep)
     _pos += _vel*timeStep;
     */
 
-
     /*Velocity Verlet Method is a much better method and is barely any more complex than Euler*/
-    _acc = _force / _mass;
-    _pos+= timeStep * (_vel + timeStep/2 * _acc);
-    _vel += timeStep * _acc;
+    //_acc = _force / _mass;
+    //_pos+= timeStep * (_vel + timeStep/2 * _acc);
+    //_vel += timeStep * _acc;
 
-    /*Runge-Kutte 4th Order method, the go to solver, a good degree more complex than the methods above but usually achieves good accuracy*/
-    //Look it up, many implementations can be found online
-    
+    /*Runge Kutta 4th Order*/
+
+    _acc = _force / _mass;  
+    //estimate v(t+z)=v(t)+z*a(t)
+    auto deriv = [&](double t, std::vector<double>u) {      
+       return std::vector<double>{_vel.x+t*_acc.x, _vel.y + t*_acc.y, _vel.z + t*_acc.z, _acc.x, _acc.y, _acc.z };
+    };
+   
+    auto result = ODE::rk4vec(0, { _pos.x,_pos.y,_pos.z,_vel.x,_vel.y,_vel.z }, timeStep, deriv);
+
+    _pos = { result[0],result[1], result[2] };    
+    _vel = { result[3],result[4], result[5] };
+
 
 
 }
@@ -40,22 +49,22 @@ void Particle::setForce(const glm::dvec3& force)
     _force = force;
 }
 
-glm::dvec3 Particle::getPosition()
+glm::dvec3 Particle::getPosition() const
 {
     return _pos;
 }
 
-glm::dvec3 Particle::getVelocity()
+glm::dvec3 Particle::getVelocity() const
 {
     return _vel;
 }
 
-glm::dvec3 Particle::getAcceleration()
+glm::dvec3 Particle::getAcceleration() const
 {
     return _acc;
 }
 
-double Particle::getMass()
+double Particle::getMass() const
 {
     return _mass;
 }

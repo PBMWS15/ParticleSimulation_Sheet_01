@@ -1,5 +1,6 @@
 #include "Ball.h"
 #include "Simulation.h"
+#include <iostream>
 
 
 void printVector(const glm::dvec3& vec)
@@ -17,12 +18,12 @@ int main(int argc, char** argv)
 
     //golfbal={position,mass, radius}
     Ball golfball{ {0,0,0},0.04593,0.0427/2 };
-    double angle = 45;
-    double speed = 60;
+    double angle = 42;
+    double speed = 45;
 
 
     //creating the starting velocitz vector
-    double angleInRadians = glm::radians(angle);
+    auto angleInRadians = glm::radians(angle);
     glm::dvec3 launchVelocity{ cos(angleInRadians),sin(angleInRadians),0.0 };    
     launchVelocity *= speed;
 
@@ -30,7 +31,7 @@ int main(int argc, char** argv)
     golfball.setVelocity(launchVelocity);
 
     //create the simulation={ball, startTime,endTime,stepsize,(optional)wind vector}
-    Simulation sim{ golfball,0.0,100,timeStep,{0.0,0.0,7.0}};
+    Simulation sim{ golfball,0.0,100,timeStep,{0,0,0.0}};
 
     //run simulation
     sim.run();

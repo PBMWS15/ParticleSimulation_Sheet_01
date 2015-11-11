@@ -1,5 +1,7 @@
 #pragma once
 #include"Ball.h"
+#include <functional>
+
 class Simulation
 {
 public:
@@ -7,7 +9,7 @@ public:
     ~Simulation();
     void update(double deltaTime);
     void run();
-    Ball getBall();
+    Ball getBall()const;
 private:
     Ball _ball; 
 
@@ -26,7 +28,10 @@ private:
     //relevant data for collision for more complex terrain should be computed, for a flat surface can be hardcoded
     glm::dvec3 _collisionNormal{ 0.0,1.0,0.0 };
     glm::dvec3 _collisionTangent{ 1.0,0.0,0.0 };
-    double _collisionEps = 0.3;
+    double _collisionEps = 0.7;
+
+
+    std::function<bool(Ball)> customstopCondition;
    
 };
 

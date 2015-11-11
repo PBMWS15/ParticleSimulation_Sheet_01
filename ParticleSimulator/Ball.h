@@ -7,10 +7,11 @@ public:
     Ball(const glm::dvec3& position, double mass, double radius);
     ~Ball();
     
-    double getArea();
-    double getRadius();
+    double getArea() const;
+    double getRadius() const;
 
 private:
     double _radius;
+    double _area;
 };
 
